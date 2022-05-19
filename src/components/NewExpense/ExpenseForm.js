@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import './ExpenseForm.css';
 
 const ExpenseForm = (props) => {
+  const [showExpenseForm, setShowExpenseForm] = useState(false);
   const defaultFormState = {
     enteredTitle: '',
     enteredAmount: '',
@@ -33,11 +34,13 @@ const ExpenseForm = (props) => {
     event.preventDefault();
     const expenseData = { ...userInput };
     props.onSaveExpenseData(expenseData);
-
     setUserInput(defaultFormState);
+    setShowExpenseForm(false);
   };
 
-  return (
+  const collapsedForm = <button onClick={() => setShowExpenseForm(true)}>Add new expense</button>;
+
+  const expandedForm = (
     <form onSubmit={submitHandler}>
       <div className="new-expense__controls">
         <div className="new-expense__control">
@@ -66,9 +69,15 @@ const ExpenseForm = (props) => {
         </div>
       </div>
       <div className="new-expense__actions">
+        <button type="button" onClick={() => setShowExpenseForm(false)}>
+          Cancel
+        </button>
         <button type="submit">Add Expense</button>
       </div>
     </form>
   );
+
+  return showExpenseForm ? expandedForm : collapsedForm;
 };
+
 export default ExpenseForm;
